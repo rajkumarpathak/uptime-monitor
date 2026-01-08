@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Uptime Monitor</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Uptime Monitor Debug</h1>
+    
+    <div>
+        <h2>Test 1: API Endpoint</h2>
+        <button onclick="testApi()">Test /api/v1/clients</button>
+        <div id="api-result"></div>
+    </div>
+    
+    <div>
+        <h2>Test 2: Database Connection</h2>
+        <button onclick="testDatabase()">Check Database</button>
+        <div id="db-result"></div>
+    </div>
+    
+    <div>
+        <h2>Test 3: Check Current Page</h2>
+        <button onclick="checkCurrentApp()">Check Vue App</button>
+        <div id="app-result"></div>
+    </div>
+    
+    <script>
+        async function testApi() {
+            try {
+                const response = await axios.get('/api/v1/clients');
+                document.getElementById('api-result').innerHTML = 
+                    `<pre>${JSON.stringify(response.data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('api-result').innerHTML = 
+                    `<div style="color:red">API Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testDatabase() {
+            try {
+                const response = await fetch('/api/v1/clients');
+                const data = await response.json();
+                
+                let html = `<p>Status: ${response.status}</p>`;
+                html += `<p>Clients found: ${Array.isArray(data) ? data.length : 
+                         (data.data ? data.data.length : 'Unknown format')}</p>`;
+                
+                document.getElementById('db-result').innerHTML = html;
+            } catch (error) {
+                document.getElementById('db-result').innerHTML = 
+                    `<div style="color:red">Error: ${error.message}</div>`;
+            }
+        }
+        
+        function checkCurrentApp() {
+            const select = document.querySelector('select[id="client-select"]');
+            const options = select ? Array.from(select.options).map(o => o.text) : [];
+            
+            let html = `<p>Select element found: ${!!select}</p>`;
+            html += `<p>Options: ${options.join(', ')}</p>`;
+            
+            // Check Vue data
+            if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+                html += `<p>Vue DevTools detected</p>`;
+            }
+            
+            document.getElementById('app-result').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
