@@ -44,14 +44,6 @@
 11. `php artisan schedule:work`
 12. Open: http://127.0.0.1:8000
 
-### Windows Convenience Script (Optional)
-
-For Windows users, a helper script is provided:
-
-```bash
-scripts/start-uptime-monitor.bat
-
-
 ## Testing:
 
 ### Manual Testing:
@@ -96,3 +88,10 @@ php artisan monitor:check-websites
 
 # Check logs for email alert
 tail -f storage/logs/laravel.log
+
+### Windows Convenience Script (Optional)
+
+For Windows users, a helper script is provided:
+
+```bash
+scripts/start-uptime-monitor.bat
